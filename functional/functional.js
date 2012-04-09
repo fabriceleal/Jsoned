@@ -97,6 +97,29 @@ exports.map = function(fn, sequence, object) {
     return result;
 }
 
+exports.mapAsync = function(fn, sequence, callback, object){
+	fn = Function.toFunction(fn);	
+	var len = sequence.length,
+	    result = new Array(len),
+	    set = new Array(len),
+	    tot = 0;
+
+	for(var i = 0; i < len; i++)
+		(function(){
+			var index = i;
+			fn.apply(object, [sequence[index], function(value){
+				result[index] = value;
+				if(!set[index]){
+					tot++;
+					set[index] = true;
+				}
+				if(tot == len){
+					callback(result);
+				}
+			}]);
+		})();
+}
+
 /**
  * Applies `fn` to `init` and the first element of `sequence`,
  * and then to the result and the second element, and so on.

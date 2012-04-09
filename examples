@@ -1,0 +1,26 @@
+
+Example 1: Get array with the names of all the repositories of user fabriceleal:
+
+curl "https://api.github.com/users/fabriceleal/repos" | ./jed.js -m "' _.name '"
+
+
+Example 2: Get list of all commits of all the repositories of user fabriceleal:
+
+<Example 1> | ./jed.js -ma "
+function(name, setter){
+	var output = '';
+
+	fork(
+		'curl', 
+		[ 'https://api.github.com/repos/fabriceleal/' + name + '/commits' ], 
+		null, 
+		function(data){ 
+			output += data;
+		}, 
+		null, 
+		function(code){ 
+			var data = JSON.parse(output);
+			setter( data ); 
+			return true; 
+		});
+	}"

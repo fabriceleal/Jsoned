@@ -4,23 +4,85 @@
 
 var functional = require('./functional/functional.js')
 
+/*
+Usage:
+
+echo "[1,2,3,4]" | jed.js -m "'+1'"
+
+is equivalent to
+
+echo "[1,2,3,4]" | jed.js -m "function(x){return(x+1);}"
+
+*/
+
+var spawn = require('child_process').spawn;
+
+/*
+	Generic fork function, with callbacks for incoming data on stdin, stdout, stderr and exit
+*/
+function fork(command, args, onStdinData, onStdoutData, onStderrData, onExit){
+	var exec = spawn(command, args);
+	
+	exec.stdin.on('data', function(data){
+		if(onStdinData){
+			onStdinData(data);
+		}
+	});
+	exec.stdout.on('data', function(data){
+		if(onStdoutData){
+			onStdoutData(data);
+		}
+	});
+	exec.stderr.on('data', function(data){
+		if(onStderrData){
+			onStderrData(data);
+		}
+	});
+	exec.on('exit', function(code){
+		if(onExit){
+			onExit(code);
+		}
+	});
+
+}
+
 // Debug
 //console.log(functional)
 
 var processing = {
 	"map" : {
-		"process" : function(data, callback, args){ 
-			return functional.map(callback, data);
+		"process" : function(data, callback, args, finalCallback){ 
+			var data = functional.map(callback, data);
+			finalCallback(data);
+			return data;
 		}		
 	},
+	"map-async" : {
+		"process" : function(data, callback, args, finalCallback){
+			// TODO: setterCallback should be a function object
+
+			var data = functional.mapAsync(callback, data, finalCallback);
+			
+			return data;
+		}
+	},
 	"select" : {
-		"process" : function(data, callback, args){ 
-			return functional.select(callback, data);
+		"process" : function(data, callback, args, finalCallback){ 
+			var data = functional.select(callback, data);
+			
+			finalCallback(data);
+
+			return data;
 		}
 	},
 	"reduce" : {
-		"process" : function(data, callback, args){ 
-			return functional.reduce(callback, args[0], data);
+		"process" : function(data, callback, args){
+			// args[0] Should be an initial value for the aggregation result 
+			var data = functional.reduce(callback, args[0], data);
+
+			finalCallback(data);
+
+			return data;
 		}		
 	}
 };
@@ -39,6 +101,8 @@ process.argv.forEach(function (val, index, arr){
 		case 2: // Strategy (map, select, reduce)
 			if(["m", "-m", "map", "-map"].indexOf(val) > -1){
 				strategy = "map";
+			}else if (["ma", "-ma", "map-async", "-map-async"].indexOf(val) > -1){
+				strategy = "map-async";
 			}else if (["s", "-s", "sel", "-sel", "select", "-select"].indexOf(val) > -1){
 				strategy = "select";
 			}else if (["r", "-r", "red", "-red", "reduce", "-reduce"].indexOf(val) > -1){
@@ -87,8 +151,10 @@ process.stdin.on('end', function(){
 	/*process.stdout.write('the end!\n');*/
 	var data = JSON.parse(input);
 
-	data = processing[strategy].process(data , callback, extraArgs);
+	processing[strategy].process(data , callback, extraArgs, function(data){
+		process.stdout.write(JSON.stringify(data) + '\n');
+	});
 	
-	process.stdout.write( JSON.stringify(data) + '\n');
+	//process.stdout.write( JSON.stringify(data) + '\n');
 });
 
