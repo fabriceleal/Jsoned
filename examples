@@ -4,12 +4,11 @@ Example 1: Get array with the names of all the repositories of user fabriceleal:
 curl "https://api.github.com/users/fabriceleal/repos" | ./jed.js -m "' _.name '"
 
 
-Example 2: Get list of all commits of all the repositories of user fabriceleal:
+Example 2: Get array with all commits of all the repositories of user fabriceleal:
 
 <Example 1> | ./jed.js -ma "
 function(name, setter){
 	var output = '';
-
 	fork(
 		'curl', 
 		[ 'https://api.github.com/repos/fabriceleal/' + name + '/commits' ], 
@@ -20,7 +19,69 @@ function(name, setter){
 		null, 
 		function(code){ 
 			var data = JSON.parse(output);
-			setter( data ); 
+			setter({ 
+				'name'    : name, 
+				'commits' : data
+				}); 
 			return true; 
 		});
+	}" 
+
+Example 3: Get all the Languages for all repositories
+<Example 1> | ./jed.js -ma "
+function(name, setter){
+	var output = '';
+	fork(
+                'curl',
+                [ 'https://api.github.com/repos/fabriceleal/' + name + '/languages' ],
+                null,
+                function(data){
+                        output += data;
+                },
+                null,
+                function(code){
+                        var data = JSON.parse(output);
+                        setter(data);
+                        return true;
+                });
 	}"
+
+
+curl "https://api.github.com/users/fabriceleal/repos" |  ./jed.js -m "' _.name '" | ./jed.js -ma "
+function(name, setter){
+        var output = '';
+        fork(
+                'curl',
+                [ 'https://api.github.com/repos/fabriceleal/' + name + '/languages' ],
+                null,
+                function(data){
+                        output += data;
+                },
+                null,
+                function(code){
+                        var data = JSON.parse(output);
+                        setter(data);
+                        return true;
+                });
+        }" | ./jed.js -r " function(res, input){ for(var i in input){ if(res[i]){ res[i] = res[i] + input[i];} else { res[i] = input[i];} } } " "{}"
+
+
+curl "https://api.github.com/users/fabriceleal/repos" | ./jed.js -m "' _.name '" | ./jed.js -ma "
+function(name, setter){
+        var output = '';
+        fork(
+                'curl',
+                [ 'https://api.github.com/repos/fabriceleal/' + name + '/languages' ],
+                null,
+                function(data){
+                        output += data;
+                },
+                null,
+                function(code){
+                        var data = JSON.parse(output);
+                        setter(data);
+                        return true;
+                });
+        }" | ./jed.js -r " function(res, input){ if(input){ for(var i in input){ if(input[i]){ res[i] = input[i] + (res[i]? res[i]: 0); } } } return res;} " 
+
+// TODO: Show how filtering / transforming can be used inside the supplied function itself
