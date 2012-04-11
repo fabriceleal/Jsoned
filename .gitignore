@@ -1,2 +1,3 @@
 *.swp
-*.json # Test files
+# Test files
+*.json
