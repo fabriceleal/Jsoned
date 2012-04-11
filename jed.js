@@ -59,8 +59,6 @@ var processing = {
 	},
 	"map-async" : {
 		"process" : function(data, callback, args, finalCallback){
-			// TODO: setterCallback should be a function object
-
 			var data = functional.mapAsync(callback, data, finalCallback);
 			
 			return data;
@@ -87,6 +85,15 @@ var processing = {
 
 			return data;
 		}		
+	},
+	"doityourself" : {
+		"process" : function(data, callback, args, finalCallback){
+			var data = callback(data, args);
+			
+			finalCallback(data);
+
+			return data;
+		}
 	}
 };
 
@@ -110,6 +117,8 @@ process.argv.forEach(function (val, index, arr){
 				strategy = "select";
 			}else if (["r", "-r", "red", "-red", "reduce", "-reduce"].indexOf(val) > -1){
 				strategy = "reduce";
+			}else if (["d", "-d", "do", "-do"].indexOf(val) > -1){
+				strategy = "doityourself";
 			}
 			
 			break;
