@@ -76,9 +76,12 @@ var processing = {
 		}
 	},
 	"reduce" : {
-		"process" : function(data, callback, args){
+		"process" : function(data, callback, args, finalCallback){
 			// args[0] Should be an initial value for the aggregation result 
-			var data = functional.reduce(callback, args[0], data);
+			var obj = eval("(" + args[0] + ")");
+			//console.log('Evaled = ' + obj);
+
+			var data = functional.reduce(callback, obj, data);
 
 			finalCallback(data);
 
@@ -122,7 +125,7 @@ process.argv.forEach(function (val, index, arr){
 
 // All the rest goes into extraArgs
 extraArgs = process.argv.slice(4);
-
+//console.log('extraArgs = ' + extraArgs);
 
 // Read input (json) from stdin
 process.stdin.resume();
@@ -148,13 +151,13 @@ process.stdin.on('data', function(chunk){
 
 
 process.stdin.on('end', function(){
-	/*process.stdout.write('the end!\n');*/
+	//console.log(input);
+
 	var data = JSON.parse(input);
 
 	processing[strategy].process(data , callback, extraArgs, function(data){
 		process.stdout.write(JSON.stringify(data) + '\n');
 	});
 	
-	//process.stdout.write( JSON.stringify(data) + '\n');
 });
 
