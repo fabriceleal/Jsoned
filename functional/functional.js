@@ -129,10 +129,15 @@ exports.mapAsync = function(fn, sequence, callback, object){
  */
 exports.reduce = function(fn, init, sequence, object) {
     fn = Function.toFunction(fn);
-    var len = sequence.length,
+    var len = sequence.constructor == Array ? sequence.length : Object.keys(sequence).length,
         result = init;
-    for (var i = 0; i < len; i++)
-        result = fn.apply(object, [result, sequence[i]]);
+    for (var i in sequence)
+        result = fn.apply(
+		object, 
+		[result, 
+		sequence.constructor == Array? 
+			sequence[i] : 
+			{ 'key' : i, 'value' : sequence[i] } ]);
     return result;
 }
 
