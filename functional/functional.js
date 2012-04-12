@@ -92,7 +92,7 @@ exports.map = function(fn, sequence, object) {
     fn = Function.toFunction(fn);
     var len = sequence.length,
         result = new Array(len);
-    for (var i = 0; i < len; i++)
+    for (var i in sequence)
         result[i] = fn.apply(object, [sequence[i], i]);
     return result;
 }
