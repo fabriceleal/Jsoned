@@ -39,6 +39,7 @@ curl "https://api.github.com/users/fabriceleal/repos" | ../jed.js -s "' _.fork =
 			for(var i in times){
 				ret.push([repo, i, times[i]]);
 			}
+			// We need the index, so we can't translate this immediately to a map'ing
 
 			return ret;
 		} 
