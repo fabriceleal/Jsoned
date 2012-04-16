@@ -100,7 +100,8 @@ var processing = {
 // By default, identity, simply return the input itself (?)
 var 	strategy  = "map",
 	extraArgs = [],
-	callback  = '_';
+	callback  = '_', 
+	lastRead = -1;
 
 // Get command line args
 process.argv.forEach(function (val, index, arr){
@@ -119,7 +120,7 @@ process.argv.forEach(function (val, index, arr){
 				strategy = "reduce";
 			}else if (["d", "-d", "do", "-do"].indexOf(val) > -1){
 				strategy = "doityourself";
-			}
+			}			
 			
 			break;
 		case 3: // Callback
@@ -129,11 +130,12 @@ process.argv.forEach(function (val, index, arr){
 			
 			break;
 	}	
+	lastRead = index;
 	//process.stdout.write(index + ': ' + val + '\n');
 });
 
 // All the rest goes into extraArgs
-extraArgs = process.argv.slice(4);
+extraArgs = process.argv.slice(lastRead + 1);
 //console.log('extraArgs = ' + extraArgs);
 
 // Read input (json) from stdin
