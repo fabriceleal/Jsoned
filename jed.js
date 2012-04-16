@@ -105,6 +105,8 @@ var 	strategy  = "map",
 
 // Get command line args
 process.argv.forEach(function (val, index, arr){
+	lastRead = index;
+
 	if(index == 0 || index == 1)
 		return; // Ignore first two parameters
 
@@ -129,13 +131,13 @@ process.argv.forEach(function (val, index, arr){
 			callback = eval("(" + val + ")");
 			
 			break;
-	}	
-	lastRead = index;
+	}
 	//process.stdout.write(index + ': ' + val + '\n');
 });
 
 // All the rest goes into extraArgs
-extraArgs = process.argv.slice(lastRead + 1);
+//console.log(lastRead);
+extraArgs = process.argv.slice( lastRead );
 //console.log('extraArgs = ' + extraArgs);
 
 // Read input (json) from stdin
