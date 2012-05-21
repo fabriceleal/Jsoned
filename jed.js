@@ -2,7 +2,9 @@
 
 // Using /usr/sbin/node throws a weird error: "axconfig: port 1 is not active" and "axconfig: port 2 is not active"
 
-var functional = require('./functional/functional.js')
+var functional = require('./functional/functional.js');
+var gengetopt = require('./../gengetopt-js/gengetopt.js');
+var fs = require('fs');
 
 /*
 Usage:
@@ -76,7 +78,7 @@ var processing = {
 	"reduce" : {
 		"process" : function(data, callback, args, finalCallback){
 			// args[0] Should be an initial value for the aggregation result 
-			var obj = eval("(" + args[0] + ")");
+			var obj = eval("(" + args.reduce_init + ")");
 			//console.log('Evaled = ' + obj);
 
 			var data = functional.reduce(callback, obj, data);
@@ -99,10 +101,46 @@ var processing = {
 
 // By default, identity, simply return the input itself (?)
 var 	strategy  = "map",
-	extraArgs = [],
+	extraArgs = {},
 	callback  = '_', 
 	lastRead = -1;
 
+var opts = gengetopt.parseArgs(process.argv).transf;
+if(opts.hasOwnProperty("m")){
+	// Map with callback
+	strategy = "map";
+	callback = eval("(" + opts["m"] + ")");
+}else if(opts.hasOwnProperty("ma")){
+	// Map-Assync with callback
+	strategy = "map-async";
+	callback = eval("(" + opts["ma"] + ")");
+}else if(opts.hasOwnProperty("s")){
+	// Select with callback
+	strategy = "select";
+	callback = eval("(" + opts["s"] + ")");
+}else if(opts.hasOwnProperty("r")){
+	// Reduce with callback
+	strategy = "reduce";
+	callback = eval("(" + opts["r"] + ")");
+	extraArgs.reduce_init = opts["i"];
+}else if(opts.hasOwnProperty("d")){
+	// Do-it-yourself with callback
+	strategy = "doityourself";
+	callback = eval("(" + opts["d"] + ")");
+}else if(opts.hasOwnProperty("df")){
+	// Do-it-yourself with file
+	strategy = "doityourself";
+	callback = eval("(" + fs.readFileSync(opts["df"], 'utf8') + ")");
+}
+
+/*
+Usage:
+jed.js -[s|ma|m|d] "Callback-function"
+jed.js -r "Callback-function" -i "InitValue"
+*/
+
+
+/*
 // Get command line args
 process.argv.forEach(function (val, index, arr){
 	lastRead = index;
@@ -139,6 +177,7 @@ process.argv.forEach(function (val, index, arr){
 //console.log(lastRead);
 extraArgs = process.argv.slice( lastRead );
 //console.log('extraArgs = ' + extraArgs);
+*/
 
 // Read input (json) from stdin
 process.stdin.resume();
