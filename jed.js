@@ -110,19 +110,44 @@ if(opts.hasOwnProperty("m")){
 	// Map with callback
 	strategy = "map";
 	callback = eval("(" + opts["m"] + ")");
+}else if(opts.hasOwnProperty("mf")){
+	// Map with file
+	strategy = "map";
+	callback = eval("(" + fs.readFileSync(opts["mf"], 'utf8') + ")");
+
+
 }else if(opts.hasOwnProperty("ma")){
 	// Map-Assync with callback
 	strategy = "map-async";
 	callback = eval("(" + opts["ma"] + ")");
+}else if(opts.hasOwnProperty("maf")){
+	// Map-Assync with file
+	strategy = "map-async";
+	callback = eval("(" + fs.readFileSync(opts["maf"], 'utf8') + ")");
+
+
 }else if(opts.hasOwnProperty("s")){
 	// Select with callback
 	strategy = "select";
 	callback = eval("(" + opts["s"] + ")");
+}else if(opts.hasOwnProperty("sf")){
+	// Select with file
+	strategy = "select";
+	callback = eval("(" + fs.readFileSync(opts["sf"], 'utf8') + ")");
+
+
 }else if(opts.hasOwnProperty("r")){
 	// Reduce with callback
 	strategy = "reduce";
 	callback = eval("(" + opts["r"] + ")");
 	extraArgs.reduce_init = opts["i"];
+}else if(opts.hasOwnProperty("rf")){
+	// Reduce with callback
+	strategy = "reduce";
+	callback = eval("(" + fs.readFileSync(opts["rf"], 'utf8') + ")");
+	extraArgs.reduce_init = opts["i"];
+
+
 }else if(opts.hasOwnProperty("d")){
 	// Do-it-yourself with callback
 	strategy = "doityourself";
