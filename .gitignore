@@ -1,3 +1,4 @@
 *.swp
 # Test files
 *.json
+node_modules/*

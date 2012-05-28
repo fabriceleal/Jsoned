@@ -1,10 +1,8 @@
-# Jed
-Json Editor using Node
+# Jsoned
+Json Editor using Node. First called jed, I renamed it as jsoned, as "jed" was already a npm module >:(
 
-Usage:
-....
+## Installation:
+npm install jsoned
 
-TODO:
-* Add usage
-* Make instalable
-
+## Usage:
+TODO ...
