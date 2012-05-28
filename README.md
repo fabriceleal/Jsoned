@@ -2,7 +2,21 @@
 Json Editor using Node. First called jed, I renamed it as jsoned, as "jed" was already a npm module >:(
 
 ## Installation:
-npm install jsoned
+
+(use the "-g" option so you have the jsoned command-line utility installed. You'll probably need to use sudo)
+npm install jsoned -g 
 
 ## Usage:
-TODO ...
+
+Simple example:
+
+> echo "[1,2,3]" | jsoned -m "' _ * 2 '"
+[2,4,6]
+
+Which is the same as:
+
+> echo "[1,2,3]" | jsoned -m "function(x){return x*2;}"
+[2,4,6]
+
+
+TODO: more examples ...
