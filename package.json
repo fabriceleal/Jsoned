@@ -2,10 +2,10 @@
   "author": "Fabrice Leal <fabrice.leal.ch@gmail.com> (fabriceleal.github.com)",
   "name": "jsoned",
   "description": "The json stream editor.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
-    "url": "git://github.com/fabriceleal/Jed.git"
+    "url": "git://github.com/fabriceleal/Jsoned.git"
   },
   "bin":{
 		"jsoned" : "./jsoned.js"
