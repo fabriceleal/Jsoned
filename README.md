@@ -4,6 +4,7 @@ Json Editor using Node. First called jed, I renamed it as jsoned, as "jed" was a
 ## Installation:
 
 (use the "-g" option so you have the jsoned command-line utility installed. You'll probably need to use sudo)
+
 npm install jsoned -g 
 
 ## Usage:
