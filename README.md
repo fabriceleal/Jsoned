@@ -10,13 +10,20 @@ npm install jsoned -g
 
 Simple example:
 
+```shell
 > echo "[1,2,3]" | jsoned -m "' _ * 2 '"
 [2,4,6]
+```
 
 Which is the same as:
 
+```shell
 > echo "[1,2,3]" | jsoned -m "function(x){return x*2;}"
 [2,4,6]
+```
 
+Check the wiki for detailed info ...
 
-TODO: more examples ...
+## About Jsoned
+
+As you can see in the wiki, there are inconsistencies through the commands, mainly in the stuff that is sent into the functions provided as input. I shall review this.
