@@ -1,5 +1,5 @@
 # Jsoned
-Json Editor using Node. First called jed, I renamed it as jsoned, as "jed" was already a npm module >:(
+The json stream editor utility.
 
 ## Installation:
 
@@ -28,3 +28,4 @@ Check the wiki for detailed info ...
 ## About Jsoned
 
 As you can see in the wiki, there are inconsistencies through the commands, mainly in the stuff that is sent into the functions provided as input. I shall review this.
+First called jed, I renamed it as jsoned, as "jed" was already a npm module >:(
