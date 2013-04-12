@@ -23,9 +23,12 @@ Which is the same as:
 [2,4,6]
 ```
 
-Check the wiki for detailed info ...
+Check the [wiki][1] for detailed info ...
 
 ## About Jsoned
 
 As you can see in the wiki, there are inconsistencies through the commands, mainly in the stuff that is sent into the functions provided as input. I shall review this.
 First called jed, I renamed it as jsoned, as "jed" was already a npm module >:(
+
+[1]: https://github.com/fabriceleal/Jsoned/wiki
+
